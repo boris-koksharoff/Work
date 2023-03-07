@@ -1,4 +1,4 @@
-@startuml
+@startuml Act_25_DO
 actor "Продавец" as user
 participant "Оператор ЭДО" as op
 actor "Покупатель" as user1

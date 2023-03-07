@@ -1,4 +1,4 @@
-@startuml имя
+@startuml
 actor "Продавец" as user
 participant "Оператор ЭДО Продавца" as prod
 participant "Оператор ЭДО Покупателя" as pok
