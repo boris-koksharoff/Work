@@ -1,0 +1,21 @@
+@startuml slide_skinparam
+skinparam {
+Maxmessagesize 200
+}
+skinparam sequence {
+ParticipantPadding 30
+MessageAlign center
+}
+autonumber
+title Your diagram title here
+actor Aaaactor as ac order 10
+participant "__Cooomponent__" as a order 20
+database Daaatabase as db order 30
+queue "Broooker" as b order 40
+ac -> a: Hi there
+return Oh, hi!
+a -> db: Let's save it
+db --> a: Done
+db -> b: Manual line break\nwith the help of "\\n"
+return Automatic line break due to max message size
+@enduml
