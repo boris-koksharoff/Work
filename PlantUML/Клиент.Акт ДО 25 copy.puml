@@ -1,0 +1,69 @@
+@startuml
+actor "Продавец" as user
+participant "Оператор ЭДО" as op
+actor "Покупатель" as user1
+!$Т1 = "ДокументОПередачеРезультатовРаботИсполнитель"
+!$Т2 = "ДокументОПередачеРезультатовРаботЗаказчик"
+!$СОО = "СообщениеОбОшибке"
+!$ПДП = "ПодтверждениеДатыПоступления"
+!$ПДО = "ПодтверждениеДатыОтправки"
+!$ИОП = "ИзвещениеОПолучении"
+!$УОУ = "УведомлениеОбУточнении"
+activate user
+activate op 
+user -> op: 1.$Т1
+  alt 
+        op  -[#red]> user: 2А. $СОО
+        note left: Проверка не пройдена
+  end 
+   op  -[#green]> user: 2Б. $ПДП на\n $Т1
+   note left: Проверка пройдена
+  deactivate user
+  
+  activate user1
+  op -> user1: 4.$Т1
+  op -> user1: 5.$ПДО на\n $Т1
+  user1 -> op: 7.$ИОП на\n $Т1 
+  deactivate user1
+    
+  activate user 
+  op -> user: 9.$ИОП на\n $Т1 
+  deactivate user
+  deactivate op
+
+   alt 
+     user1  -[#red]> op: 10.$УОУ на\n $Т1 
+     activate user1
+     activate op
+      note left: Получатель отклонил документ
+  
+     activate op 
+     op -> user1: 12.$ПДП на\n $УОУ 
+     deactivate user1
+     op -> user: 13.$УОУ на\n $Т1 
+     activate user
+     op -> user: 14.$ПДО на\n $УОУ 
+     deactivate user
+
+   deactivate op
+   
+   end
+   alt 
+     user1  -[#green]> op: 10.$Т2
+    note left: Получатель принял документ
+     activate user1
+     activate op
+     
+     op -> user1: 12.$ПДП на\n $Т2
+     op -> user: 13.$Т2 
+     activate user
+     op -> user: 14.$ПДО на\n $Т2 
+     
+     user -> op: 16.$ИОП на\n $Т2
+     deactivate user
+          
+     op -> user1: 18.$ИОП на\n $Т2
+    deactivate op
+    deactivate user1
+   end
+@enduml
