@@ -9,6 +9,8 @@ actor "Покупатель" as user1
 !$ПДО = "ПодтверждениеДатыОтправки"
 !$ИОП = "ИзвещениеОПолучении"
 !$УОУ = "УведомлениеОбУточнении"
+!$Ст = "Статус:"
+!$Тр = "Транз.:"
 activate user
 activate op 
 user -> op: 1.$Т1
@@ -40,18 +42,20 @@ user -> op: 1.$Т1
      activate op 
      op -> user1: 12.$ПДП на\n $УОУ 
      deactivate user1
-     op -> user: 13.$УОУ на\n $Т1 
+     op -> user: 13.$УОУ на\n $Т1
+     note left: $Ст "Ожидается извещение о получении" \n$Тр (25_05_05) ПДП на Акт 
      activate user
      op -> user: 14.$ПДО на\n $УОУ 
      deactivate user
-
-   deactivate op
+     
+     deactivate op
    
    end
    alt 
-     user1  -[#green]> op: 10.$Т2
-    note left: Получатель принял документ
+     activate op
      activate user1
+     user1  -[#green]> op: 10.$Т2
+        note left: Получатель принял документ
      activate op
      
      op -> user1: 12.$ПДП на\n $Т2
