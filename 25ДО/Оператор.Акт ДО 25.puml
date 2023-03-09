@@ -15,7 +15,7 @@ actor "Покупатель" as user1
    user -> prod: 1.$Т1
    activate user
    activate prod 
-   prod  -> user: 2а. $ПДП на\n$Т1
+   prod  -> user: 2. $ПДП на\n$Т1
   deactivate user
   prod -> pok: 3.$Т1
   deactivate prod
