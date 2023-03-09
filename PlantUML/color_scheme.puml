@@ -1,0 +1,37 @@
+@startuml color_scheme
+'this is single line comment
+/' this is
+multi line comment
+'/
+autonumber
+hide footbox
+box Net segment Public #PaleGreen
+actor Aaaactor as act
+end box
+box Net segment A #LightYellow
+participant "__Cooomponent__" as a
+database Daaatabase as db
+end box
+box Net segment B #Thistle
+queue "Broooker" as b
+end box
+act -> a: Hi there
+Group Custom group name
+a -> b: request many parameters
+return response with response code
+a -> db: save file
+alt #f0feed Operation succeeded
+return Success
+else #fff0f5 Operation failed
+a <-- db: Fail
+alt #LightCyan Monday, Tuesday or Wednesday
+a -> b: I'm very tired
+else #LemonChiffon Thursday or Friday
+return I can feel it...
+else Today is Weekend
+return Partytime!
+note right: aaa
+end
+end
+end
+@enduml

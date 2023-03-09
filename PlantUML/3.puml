@@ -22,11 +22,11 @@ Group Custom group name
     return response with response code
     a -> db: save file
     alt #f0feed Operation succeeded
-    return Success
+        return Success
     else #fff0f5 Operation failed
-    a <-- db: Fail
-            alt #LightCyan Monday, Tuesday or Wednesday
-        a -> b: I'm very tired
+        a <-- db: Fail
+        alt #LightCyan Monday, Tuesday or Wednesday
+            a -> b: I'm very tired
         else #LemonChiffon Thursday or Friday
             return I can feel it...
         else Today is Weekend

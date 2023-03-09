@@ -1,0 +1,142 @@
+@startuml Оператор.Акт ДО 25
+actor "Продавец" as user
+participant "Оператор ЭДО Продавца" as prod
+participant "Оператор ЭДО Покупателя" as pok
+actor "Покупатель" as user1
+!$Т1 = "ДокументОПередачеРезультатовРаботИсполнитель"
+!$Т2 = "ДокументОПередачеРезультатовРаботЗаказчик"
+!$ПДП = "ПодтверждениеДатыПоступления"
+!$ПДО = "ПодтверждениеДатыОтправки"
+!$ПДОО = "ПодтверждениеОператора"
+!$ИОП = "ИзвещениеОПолучении"
+!$УОУ = "УведомлениеОбУточнении"
+!$ПОА = "ПредложениеОбАннулировании"
+!$УОП = "УведомлениеОПринятии"
+   user -> prod: 1.$Т1
+   activate user
+   activate prod 
+   prod  -> user: 2а. $ПДП на\n$Т1
+  deactivate user
+  prod -> pok: 3.$Т1
+  deactivate prod
+  activate pok 
+  pok -> user1: 4.$Т1
+  activate user1 
+  pok -> user1: 5.<font color=green>$ПДО на\n<font color=green>$Т1
+  pok -> prod: 6.<font color=green>$ПДОО на\n<font color=green>$Т1 
+  activate prod 
+  user1 -> pok: 7.$ИОП на\n$Т1 
+  deactivate user1
+  pok -> prod: 8.$ИОП на\n$Т1 
+  deactivate pok
+  prod -> user: 9.$ИОП на\n$Т1 
+  activate user 
+  deactivate user
+  deactivate prod
+   alt <font color=Red>Покупатель отклонил документ
+     user1  -[#red]> pok: 10.$УОУ на\n$Т1 
+     activate user1
+     activate pok
+     pok -> prod: 11.$УОУ на\n$Т1
+     activate prod 
+     pok -> user1: 12.<font color=green>$ПДП на\n<font color=green>$УОУ 
+     deactivate user1
+     prod -> user: 13.$УОУ на\n$Т1 
+     activate user
+     prod -> user: 14.<font color=green>$ПДО на\n<font color=green>$УОУ 
+     deactivate user
+     prod -> pok: 15.<font color=green>$ПДОО на\n<font color=green>$УОУ 
+   deactivate prod
+   deactivate pok
+ else Покупатель принял документ
+     user1  -> pok: 10.$Т2
+     activate user1
+     activate pok
+     pok -> prod: 11.$Т2
+     activate prod 
+     pok -> user1: 12.<font color=green>$ПДП на\n<font color=green>$Т2
+     prod -> user: 13.$Т2 
+     activate user
+     prod -> user: 14.<font color=green>$ПДО на\n<font color=green>$Т2 
+     prod -> pok: 15.<font color=green>$ПДОО на\n<font color=green>$Т2 
+     user -> prod: 16.<font color=green>$ИОП на\n<font color=green>$Т2
+     deactivate user
+     prod -> pok: 17.<font color=green>$ИОП на\n<font color=green>$Т2
+     deactivate prod
+     pok -> user1: 18.<font color=green>$ИОП на\n<font color=green>$Т2
+    deactivate pok
+   deactivate user1
+   end
+   group Аннулирование [Инициатор Продавец]
+   user -> prod: 19.$ПОА
+    activate user
+    activate prod
+   prod -> pok: 20.$ПОА
+   deactivate user
+  activate pok
+  deactivate prod
+   pok -> user1: 21.$ПОА
+  deactivate pok
+  activate user1
+  alt Покупатель осогласился с аннулированием
+  user1 -> pok: 22.$УОП
+  deactivate user1
+  activate pok
+  pok -> prod: 23.$УОП
+  deactivate pok
+  activate prod
+  prod -> user: 24.$УОП
+  activate user
+  deactivate prod
+  deactivate user
+  else <font color=Red>Покупатель отклонил аннулирование
+  user1 -[#red]> pok: 25.$УОУ
+  activate user1
+  deactivate user1
+  activate pok
+  pok -> prod: 26.$УОУ
+  deactivate pok
+  activate prod
+  prod -> user: 27.$УОУ
+  activate user
+  deactivate prod
+  deactivate user
+  end
+  end
+  group Аннулирование [Инициатор Покупатель]
+   user1 -> pok: 19.$ПОА
+    activate user1
+    activate pok
+   pok -> prod: 20.$ПОА
+   deactivate user1
+  activate prod
+  deactivate pok
+   prod -> user: 21.$ПОА
+   activate user
+  deactivate prod
+  alt Продавец осогласился с аннулированием
+  user -> prod: 22.$УОП
+  deactivate user
+   activate prod
+  prod -> pok: 23.$УОП
+  deactivate prod
+  activate pok
+  pok -> user1: 24.$УОП
+  activate user1
+  deactivate pok
+  deactivate user1
+  else <font color=Red>Продавец отклонил аннулирование
+  user -[#red]> prod: 25.$УОУ
+  activate user
+  deactivate user
+  activate prod
+  prod -> pok: 26.$УОУ
+  deactivate prod
+  activate pok
+  pok -> user1: 27.$УОУ
+  activate user1
+  deactivate pok
+  deactivate user1
+  end
+  end
+@enduml

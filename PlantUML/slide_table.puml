@@ -1,0 +1,38 @@
+@startuml slide_table
+skinparam Legend {
+BackgroundColor Linen
+FontColor black
+BorderThickness 0
+FontSize 10
+}
+autonumber
+hide footbox
+ref#Lavender over Ma
+**Prerequisites interactive reference**
+User successfully authenticates
+See [[https://plantuml.com/news Docs]]
+end ref
+== Use Case A ==
+Ma -> Forrest: Life is like a box of choco...
+activate Ma
+activate Forrest
+Forrest -> Ma: Thanks
+return You're the best
+'F. auto-deactivates due to "return".
+'Return is for operation before F's act-n
+deactivate Ma
+== <font color=Purple>Use Case B ==
+alt Main flow: + condition
+|||
+Ma -> Forrest: <font color=green>Request [[https://plantuml.com/news GET \cards]] \n<font color=green>with content: \n#Object A \n##Param A_a \n#Param B
+|||
+else Alt flow: + condition
+Forrest -> Ma: <font color=red>Display: \n*UserInfo: \n**Name \n**Surname \n*Date
+end
+legend left
+' possible parameters: left | right | top | bottom | center
+**Legend here**
+<#Moccasin>|= Name |= Description |
+| Forrest | Fictional character \n See [[https://plantuml.com/news Novel]]|
+endlegend
+@enduml
