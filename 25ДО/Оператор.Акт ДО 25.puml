@@ -49,16 +49,16 @@ actor "Покупатель" as user1
    deactivate prod
    deactivate pok
  else Покупатель принял документ
-     user1  -> pok: 10.$Т2
+     user1  -> pok: 10а.$Т2
      activate user1
      activate pok
-     pok -> prod: 11.$Т2
+     pok -> prod: 11а.$Т2
      activate prod 
-     pok -> user1: 12.<font color=green>$ПДП на\n<font color=green>$Т2
-     prod -> user: 13.$Т2 
+     pok -> user1: 12а.<font color=green>$ПДП на\n<font color=green>$Т2
+     prod -> user: 13а.$Т2 
      activate user
-     prod -> user: 14.<font color=green>$ПДО на\n<font color=green>$Т2 
-     prod -> pok: 15.<font color=green>$ПДОО на\n<font color=green>$Т2 
+     prod -> user: 14а.<font color=green>$ПДО на\n<font color=green>$Т2 
+     prod -> pok: 15а.<font color=green>$ПДОО на\n<font color=green>$Т2 
      user -> prod: 16.<font color=green>$ИОП на\n<font color=green>$Т2
      deactivate user
      prod -> pok: 17.<font color=green>$ИОП на\n<font color=green>$Т2
