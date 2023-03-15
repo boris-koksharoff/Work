@@ -1,0 +1,31 @@
+@startuml Docflows 23 incoming (SignatureRequired) StateMachine
+
+state "Подтверждается получение" as ConfirmedReceiving
+state "Требуется подтверждение получения" as RequiredDeliveryConfirmation
+state "Требуется ответная подпись" as ResponseSignatureRequired
+state "Подписывается" as Signing
+state "Отклонен" as Rejected
+state "Отклоняется" as Rejection
+state "Завершён" as Completed
+
+[*] --> ConfirmedReceiving : Первичный документ получен
+ConfirmedReceiving --> RequiredDeliveryConfirmation : ИоП не подписан \n(внутреннее событие)
+ConfirmedReceiving --> ResponseSignatureRequired : Иоп отправлен \n(ответная подпись запрошена)
+RequiredDeliveryConfirmation --> ResponseSignatureRequired : ИоП отправлен \n(ответная подпись запрошена)
+Completed --> [*]
+
+ResponseSignatureRequired --> Signing :"Подписать документ" \n(внутреннее событие)
+Signing --> ResponseSignatureRequired : Ошибка подписания согласия с документом (УОП) \n(внутреннее событие)
+Signing --> Completed : Согласие с документом отправлено (УОП)
+
+ResponseSignatureRequired --> Rejection : "Отклонить документ" \n(внутреннее событие)
+Rejection --> ResponseSignatureRequired : Ошибка подписания НЕсогласия с документом (УОУ) \n(внутреннее событие)
+Rejection --> Rejected : НЕсогласие с документом (УОУ) отправлено на оператор 
+Rejected --> [*]
+
+note right of Completed : Аннулирование расписано \n на отдельной диаграмме (доступно только если ответная подпись запрошена)
+note top of Signing : УОП не отправлен - выполняется повторная отправка УОП на оператор,\n статус неформализованного документа при этом не меняется 
+note left of Rejection : УОУ не отправлен - выполняется повторная отправка УОУ на оператор,\n статус документа при этом не меняется
+note left of ConfirmedReceiving : ИоП НЕ отправлен на оператор - выполняется повторная отправка ИоП,\n статус документа при этом не меняется 
+
+@enduml

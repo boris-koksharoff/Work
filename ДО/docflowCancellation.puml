@@ -1,0 +1,37 @@
+@startuml Docflows Cancelation StateMachine
+
+state "Завершён" as Copmleted
+state "Ожидается аннулирование" as WaitingCansellationAnswer
+state "Аннулирован" as Cancelled
+state "Запрашивается аннулирование" as CancellationRequest
+state "Требуется аннулирование" as WaitngCancellationResponse
+state "Аннулируется" as WaitngCancellationAceept
+state "Аннулирование отклоняется" as WaitngCancellationReject
+
+[*] --> Copmleted
+Copmleted --> WaitngCancellationResponse : Получено ПоА
+WaitngCancellationResponse --> WaitngCancellationReject : Отправить УоУ
+WaitngCancellationReject : Формирование УоУ на ПоА
+WaitngCancellationReject : Подписание УоУ на ПоА
+WaitngCancellationReject : Отправка УоУ на ПоА
+WaitngCancellationReject --> WaitngCancellationResponse : Ошибка формирования, подписания, отправки
+WaitngCancellationReject --> Copmleted : Отправлен УоУ на ПоА
+
+WaitngCancellationResponse --> WaitngCancellationAceept : Отправить Согласие с ПоА
+WaitngCancellationAceept : Формирование УоУ на ПоА
+WaitngCancellationAceept : Подписание УоУ на ПоА
+WaitngCancellationAceept : Отправка УоУ на ПоА
+WaitngCancellationAceept --> WaitngCancellationResponse : Ошибка формирования, подписания, отправки
+WaitngCancellationAceept --> Cancelled : Отправлен Согласие с ПоА 
+
+Copmleted --> CancellationRequest : отправить ПоА
+CancellationRequest : ПоА сформирован
+CancellationRequest : ПоА подписан
+CancellationRequest --> WaitingCansellationAnswer : ПоА отправлен
+CancellationRequest --> Copmleted : Ошибка подписания, отправки, формирования ПоА
+WaitingCansellationAnswer --> Cancelled : Получено согласие с ПоА
+WaitingCansellationAnswer --> Copmleted : Получено УоУ на ПоА
+
+Cancelled --> [*]
+
+@enduml

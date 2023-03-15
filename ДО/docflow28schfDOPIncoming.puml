@@ -1,0 +1,33 @@
+@startuml Docflows 28 schf DOP incoming StateMachine
+
+state "Ожидается ПДО" as waitingDPO
+state "Ожидается первичный документ" as waitingPrimaryDocument
+state "Требуется подтверждение получения" as RequiredDeliveryConfirmation
+state "подтверждается получение" as Accept
+state "Отклонен" as Rejected
+state "Отклоняется" as Rejection
+state "Завершён" as Completed
+
+[*] --> waitingPrimaryDocument : получено подтверждение оператора
+[*] --> waitingDPO : получен Первичный документ 
+waitingPrimaryDocument --> RequiredDeliveryConfirmation : получен Первичный документ
+waitingDPO --> RequiredDeliveryConfirmation : получено подтверждение оператора
+RequiredDeliveryConfirmation --> Accept : Принять документ
+Accept --> RequiredDeliveryConfirmation : ошибка формирования, подписани ИоП \n(внутреннее событие)
+Accept : "ответный титул отправлен"
+Accept : "ИоП отправлен"
+Accept --> Completed
+Completed --> [*]
+
+RequiredDeliveryConfirmation --> Rejection : "Отклонить документ" \n(внутреннее событие)
+Rejection --> RequiredDeliveryConfirmation : ошибка формирования, подписани УоУ \n(внутреннее событие)
+Rejection --> Rejected : НЕсогласие с документом (УОУ) отправлено на оператор 
+Rejected --> [*]
+
+note left of waitingDPO : служебное состояние скрыто для пользователя
+note left of waitingPrimaryDocument : служебное состояние скрыто для пользователя
+note left of Completed : Аннулирование расписано \n на отдельной диаграмме
+note bottom of Rejection : УОУ не отправлен - выполняется повторная отправка УОУ на оператор,\n статус документа при этом не меняется
+note left of Accept : ИоП может и не придти, \n но если он пришел первый то обязательно ждем ответный титул, \n если же первый пришел ответный титул, \n то переходим в следующее состояние.
+
+@enduml

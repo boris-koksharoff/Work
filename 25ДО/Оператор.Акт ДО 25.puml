@@ -1,8 +1,6 @@
 @startuml Оператор.Акт ДО 25
-actor "Продавец" as user
-participant "Оператор ЭДО Продавца" as prod
-participant "Оператор ЭДО Покупателя" as pok
-actor "Покупатель" as user1
+!$Отправитель = "Исполнитель"
+!$Получатель = "Заказчик"
 !$Т1 = "ДокументОПередачеРезультатовРаботИсполнитель"
 !$Т2 = "ДокументОПередачеРезультатовРаботЗаказчик"
 !$ПДП = "ПодтверждениеДатыПоступления"
@@ -12,53 +10,57 @@ actor "Покупатель" as user1
 !$УОУ = "УведомлениеОбУточнении"
 !$ПОА = "ПредложениеОбАннулировании"
 !$УОП = "УведомлениеОПринятии"
+actor $Отправитель as user
+participant "Оператор ЭДО Исполнителя" as prod
+participant "Оператор ЭДО Заказчика" as pok
+actor $Получатель as user1
    user -> prod: 1.$Т1
    activate user
-   activate prod 
+   activate prod
    prod  -> user: 2. $ПДП на\n$Т1
   deactivate user
   prod -> pok: 3.$Т1
   deactivate prod
-  activate pok 
+  activate pok
   pok -> user1: 4.$Т1
-  activate user1 
+  activate user1
   pok -> user1: 5.<font color=green>$ПДО на\n<font color=green>$Т1
-  pok -> prod: 6.<font color=green>$ПДОО на\n<font color=green>$Т1 
-  activate prod 
-  user1 -> pok: 7.$ИОП на\n$Т1 
+  pok -> prod: 6.<font color=green>$ПДОО на\n<font color=green>$Т1
+  activate prod
+  user1 -> pok: 7.$ИОП на\n$Т1
   deactivate user1
-  pok -> prod: 8.$ИОП на\n$Т1 
+  pok -> prod: 8.$ИОП на\n$Т1
   deactivate pok
-  prod -> user: 9.$ИОП на\n$Т1 
-  activate user 
+  prod -> user: 9.$ИОП на\n$Т1
+  activate user
   deactivate user
   deactivate prod
-   alt <font color=Red>Покупатель отклонил документ
-     user1  -[#red]> pok: 10.$УОУ на\n$Т1 
+   alt <font color=Red>$Получатель отклонил документ
+     user1  -[#red]> pok: 10.$УОУ на\n$Т1
      activate user1
      activate pok
      pok -> prod: 11.$УОУ на\n$Т1
-     activate prod 
-     pok -> user1: 12.<font color=green>$ПДП на\n<font color=green>$УОУ 
+     activate prod
+     pok -> user1: 12.<font color=green>$ПДП на\n<font color=green>$УОУ
      deactivate user1
-     prod -> user: 13.$УОУ на\n$Т1 
+     prod -> user: 13.$УОУ на\n$Т1
      activate user
-     prod -> user: 14.<font color=green>$ПДО на\n<font color=green>$УОУ 
+     prod -> user: 14.<font color=green>$ПДО на\n<font color=green>$УОУ
      deactivate user
-     prod -> pok: 15.<font color=green>$ПДОО на\n<font color=green>$УОУ 
+     prod -> pok: 15.<font color=green>$ПДОО на\n<font color=green>$УОУ
    deactivate prod
    deactivate pok
- else Покупатель принял документ
+ else $Получатель принял документ
      user1  -> pok: 10а.$Т2
      activate user1
      activate pok
      pok -> prod: 11а.$Т2
-     activate prod 
+     activate prod
      pok -> user1: 12а.<font color=green>$ПДП на\n<font color=green>$Т2
-     prod -> user: 13а.$Т2 
+     prod -> user: 13а.$Т2
      activate user
-     prod -> user: 14а.<font color=green>$ПДО на\n<font color=green>$Т2 
-     prod -> pok: 15а.<font color=green>$ПДОО на\n<font color=green>$Т2 
+     prod -> user: 14а.<font color=green>$ПДО на\n<font color=green>$Т2
+     prod -> pok: 15а.<font color=green>$ПДОО на\n<font color=green>$Т2
      user -> prod: 16.<font color=green>$ИОП на\n<font color=green>$Т2
      deactivate user
      prod -> pok: 17.<font color=green>$ИОП на\n<font color=green>$Т2
@@ -67,7 +69,7 @@ actor "Покупатель" as user1
     deactivate pok
    deactivate user1
    end
-   group Аннулирование [Инициатор Продавец]
+   group Аннулирование [Инициатор $Отправитель]
    user -> prod: 19.$ПОА
     activate user
     activate prod
@@ -78,7 +80,7 @@ actor "Покупатель" as user1
    pok -> user1: 21.$ПОА
   deactivate pok
   activate user1
-  alt Покупатель осогласился с аннулированием
+  alt $Получатель согласился с аннулированием
   user1 -> pok: 22.$УОП
   deactivate user1
   activate pok
@@ -89,7 +91,7 @@ actor "Покупатель" as user1
   activate user
   deactivate prod
   deactivate user
-  else <font color=Red>Покупатель отклонил аннулирование
+  else <font color=Red>$Получатель отклонил аннулирование
   user1 -[#red]> pok: 25.$УОУ
   activate user1
   deactivate user1
@@ -103,7 +105,7 @@ actor "Покупатель" as user1
   deactivate user
   end
   end
-  group Аннулирование [Инициатор Покупатель]
+  group Аннулирование [Инициатор $Получатель]
    user1 -> pok: 19.$ПОА
     activate user1
     activate pok
@@ -114,7 +116,7 @@ actor "Покупатель" as user1
    prod -> user: 21.$ПОА
    activate user
   deactivate prod
-  alt Продавец осогласился с аннулированием
+  alt $Отправитель согласился с аннулированием
   user -> prod: 22.$УОП
   deactivate user
    activate prod
@@ -125,7 +127,7 @@ actor "Покупатель" as user1
   activate user1
   deactivate pok
   deactivate user1
-  else <font color=Red>Продавец отклонил аннулирование
+  else <font color=Red>$Отправитель отклонил аннулирование
   user -[#red]> prod: 25.$УОУ
   activate user
   deactivate user

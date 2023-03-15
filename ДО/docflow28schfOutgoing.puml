@@ -1,0 +1,27 @@
+@startuml Docflows 28 shf/kshf outgoing StateMachine
+state "Ожидается подтверждение оператора" as WaitingOperatorAproove
+state "Документ не передан" as OperatorError
+state "Ожидается ответ от получателя" as WaitingAnswer
+state "Завершён" as Copmleted
+state "Отклонён" as Rejected
+state "Подписывается" as Signing
+state "Готов к отправке" as ReadyToSend
+
+[*] --> ReadyToSend : Первичный документ загружен
+ReadyToSend --> Signing : Отправить первичный документ
+Signing --> ReadyToSend : Ошибка подписания
+Signing --> WaitingOperatorAproove : Первичный документ отправлен
+WaitingOperatorAproove --> WaitingAnswer : Получен ПДП
+WaitingOperatorAproove --> OperatorError : Получен сообщение об ошибке
+OperatorError --> [*]
+WaitingAnswer --> Copmleted : Получен ИоП
+
+Copmleted --> [*]
+note left of Copmleted : Аннулирование расписано   \nна отдельной диаграмме
+
+
+WaitingAnswer --> Rejected : Получено УоУ на первичку
+Copmleted --> Rejected : Получено УоУ на первичку
+Rejected --> [*]
+
+@enduml
